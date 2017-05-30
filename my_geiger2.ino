@@ -10,7 +10,7 @@
 #include <Wire.h>
 
 #define WARNING_LEVEL 10000
-#define GEIGER_TIME 10
+#define GEIGER_TIME 110
 #define PIN_PR 0
 #define PERIOD 60000000
 #define PERIOD2 500000
