@@ -3,21 +3,19 @@
  //Arduino geiger counter
 
 // Подключение библиотек
-#include "LiquidCrystal.h"
 #include <avr/delay.h>
 #include <TimerOne.h>
 #include <rgb_lcd.h>
 #include <Wire.h>
 
 #define WARNING_LEVEL 10000
-#define GEIGER_TIME 110
-#define PIN_PR 0
-#define PERIOD 60000000
-#define PERIOD2 500000
+#define GEIGER_TIME 10
+#define PERIOD 500000
 
 long int rad_now = 0;
 long int rad_mass[GEIGER_TIME];
 char str_buff[17];
+long int k = 1;
 
 
 rgb_lcd lcd;
@@ -66,10 +64,17 @@ void schetchik(void)
 
 void Timer1_action(void)
 {
+ schetchik();
+ k += 1;
+ if ( k == 15)
+ {
   rad_now = 0;
   for (int i = 0; i <= GEIGER_TIME - 1; i++) rad_now += rad_mass[i];
   rad_now = rad_now/GEIGER_TIME;
-  
+  k = 1;
+ 
+ }
+ 
 
 }
 
@@ -79,11 +84,11 @@ void The_First_Step(void)
   for (int i = 0; i <= GEIGER_TIME; i++)
   {
     impuls();
-    for (int jk = GEIGER_TIME - 2; jk > 0 ; jk--) rad_mass[jk] = rad_mass[jk + 1];
+    for (int jk = GEIGER_TIME - 1; jk > 0 ; jk--) rad_mass[jk] = rad_mass[jk + 1];
     rad_mass[0] = analogRead(2);
   }
   for (int i = 0; i <= GEIGER_TIME; i++) rad_now += rad_mass[i];
-  rad_now = rad_now/3;
+  rad_now = rad_now/GEIGER_TIME;
 
 }
 
